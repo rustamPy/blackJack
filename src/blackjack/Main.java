@@ -1,8 +1,8 @@
 package blackjack;
 
-import blackjack.gameProcess.*;
-import blackjack.player.*;
-import utils.*;
+import blackjack.gameProcess.Game;
+import blackjack.player.Player;
+import utils.Design;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,9 +12,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {
         Scanner sc = new Scanner(System.in);
+        Scanner name_sc = new Scanner(System.in);
         Game bjack;
         Player player = new Player();
-        int option, bet = 0;
+        int option, bet;
         boolean name_entered = false;
         try {
             do {
@@ -31,19 +32,16 @@ public class Main {
                 switch (option) {
                     case 1:
                         if (!name_entered) {
-                            System.out.print("\nEnter your name: ");
-                            player.setName(sc.next());
+                            System.out.print("\nEnter your name (Default: 'Unknown player'): ");
+                            player.setName(name_sc.nextLine());
                             name_entered = true;
                         }
                         if (player.getMoney() >= Game.MIN_BET) {
-                            System.out
-                                    .println(Design.YELLOW + "\n>>> Balance: PLN " + player.getMoney() + " <<<"
-                                            + Design.RESET);
-
-                            System.out
-                                    .println("\n(min: " + Game.MIN_BET + " | all-in: " + player.getMoney() + ")");
+                            System.out.println(Design.YELLOW + "\n>>> Balance: PLN " + player.getMoney() + " <<<" + Design.RESET);
+                            System.out.println("\n(min: " + Game.MIN_BET + " | all-in: " + player.getMoney() + ")");
                             System.out.print("Your bet: ");
                             bet = sc.nextInt();
+                            //Check if bet is set properly (withing the proper range)
                             while (bet > player.getMoney() || bet < Game.MIN_BET) {
                                 System.out.print(Design.RED + "Attention!! You can bet only between "
                                         + Game.MIN_BET + " and "
@@ -100,7 +98,7 @@ public class Main {
 
                 }
             } while (option != 0);
-        } catch (InputMismatchException e) {
+        } catch (InputMismatchException ignored) {
         }
         System.out.println("\nIt's always hard to say goodbye!\nRustam Karimov");
     }

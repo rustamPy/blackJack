@@ -15,7 +15,7 @@ public class Game {
     private static final int MIN_DEFAULT_CARDS = 104;
     private static final int MILLISECONDS_SLEEP = 1200;
     private boolean active;
-    private boolean isTurnPlayer;
+    private boolean  isTurnPlayer;
 
 
     public Game(Player player) {
@@ -27,6 +27,7 @@ public class Game {
         isTurnPlayer = true;
     }
 
+
     public void turnPlayer() {
         if (active) {
             Scanner sc = new Scanner(System.in);
@@ -37,17 +38,19 @@ public class Game {
             else {
                 if (player.cardValue() != 21) {
                     try {
-                        System.out.print(
-                                Design.YELLOW + "\n Hit (+) or Stand (-)? " + Design.RESET);
+                        System.out.print(Design.YELLOW + "\n Hit (+) or Stand (-)? " + Design.RESET);
                         risp = sc.next();
                         if (risp.equals("+"))
                             player.addCard(Deck.pop());
                         else
                             isTurnPlayer = false;
 
-                        if (player.cardValue() == MAX_CARDS_VALUE)
+                        if (player.cardValue() == MAX_CARDS_VALUE) {
                             isTurnPlayer = false;
-                    } catch (InputMismatchException e) {
+                            active = false;
+                        }
+                    }
+                    catch (InputMismatchException ignored) {
                     }
 
                     if (player.cardValue() > MAX_CARDS_VALUE) {
@@ -88,13 +91,13 @@ public class Game {
 
     public int resultGame() {
         if (dealer.cardValue() > MAX_CARDS_VALUE)
-            return -1;
+            return 1;
         else if (player.cardValue() > MAX_CARDS_VALUE)
-            return 1;
-        else if (dealer.cardValue() > player.cardValue() && dealer.cardValue() <= MAX_CARDS_VALUE)
-            return 1;
-        else if (dealer.cardValue() < player.cardValue() && player.cardValue() <= MAX_CARDS_VALUE)
             return -1;
+        else if (dealer.cardValue() > player.cardValue() && dealer.cardValue() <= MAX_CARDS_VALUE)
+            return -1;
+        else if (dealer.cardValue() < player.cardValue() && player.cardValue() <= MAX_CARDS_VALUE)
+            return 1;
         else
             return 0;
     }
@@ -104,18 +107,18 @@ public class Game {
         System.out.println(" " + player.getName() + "\t\t" + player.getCards() + " = " + player.cardValue());
         try {
             Thread.sleep(MILLISECONDS_SLEEP);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
     }
 
-    private void printResult(int esito) {
-        if (esito > 0) {
+    private void printResult(int opt) {
+        if (opt == -1) {
             System.out.println(
                     Design.RED + "\n\nUnfortunately, you (" + player.getName() + ") lost PLN " + player.getBet()
                             + "\nYour current balance is: PLN " + (player.getMoney() - player.getBet())
                             + Design.RESET);
             player.updateMoney(-player.getBet());
-        } else if (esito < 0) {
+        } else if (opt == 1) {
             System.out.println(Design.BLUE + "\n\nCongratulations! You (" + player.getName() + ") won PLN "
                     + player.getBet() * 2 + "\nYour current balance is: PLN " + (player.getMoney() + player.getBet())
                     + Design.RESET);
@@ -127,7 +130,7 @@ public class Game {
 
         try {
             Thread.sleep(MILLISECONDS_SLEEP);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
     }
 
@@ -135,6 +138,7 @@ public class Game {
         turnDealer();
         while (active) {
             while (isTurnPlayer) {
+                //System.out.println(player.cards);
                 turnPlayer();
                 printStatus();
             }
