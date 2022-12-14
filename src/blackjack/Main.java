@@ -21,7 +21,9 @@ public class Main {
             do {
                 System.out.println(
                         Design.RED
-                                + "\n-------------------\n🃏🃏🎰 Black Jack 🎰🃏🃏\n-------------------\n");
+                                +"\n-------------------------------------------" +
+                                "\n🃏🃏🎰 Classic and Simple Black Jack 🎰🃏🃏\n" +
+                                "-------------------------------------------\n");
                 System.out.println(Design.RESET + "(1) - Play");
                 System.out.println("(2) - Top-up Balance");
                 System.out.println("(3) - View Balance");
@@ -41,6 +43,7 @@ public class Main {
                             System.out.println("\n(min: " + Game.MIN_BET + " | all-in: " + player.getMoney() + ")");
                             System.out.print("Your bet: ");
                             bet = sc.nextInt();
+
                             //Check if bet is set properly (withing the proper range)
                             while (bet > player.getMoney() || bet < Game.MIN_BET) {
                                 System.out.print(Design.RED + "Attention!! You can bet only between "

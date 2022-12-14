@@ -1,8 +1,9 @@
 package blackjack.gameProcess;
 
-import blackjack.deck.*;
-import blackjack.player.*;
-import utils.*;
+import blackjack.deck.CardBox;
+import blackjack.player.Player;
+import utils.Design;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -12,14 +13,13 @@ public class Game {
     private final Player dealer;
     public static final int MAX_CARDS_VALUE = 21;
     public static final int MIN_BET = 2;
-    private static final int MIN_DEFAULT_CARDS = 104;
     private static final int MILLISECONDS_SLEEP = 1200;
     private boolean active;
-    private boolean  isTurnPlayer;
+    private boolean isTurnPlayer;
 
 
     public Game(Player player) {
-        Deck = new CardBox(MIN_DEFAULT_CARDS);
+        Deck = new CardBox();
         Deck.shuffle();
         dealer = new Player(); // dealer.name = "Dealer", dealer.bet = 0, dealer.money = 1000;
         this.player = player; // player.name = "Mark", player.bet = 5, player.money = 1000;
@@ -31,7 +31,7 @@ public class Game {
     public void turnPlayer() {
         if (active) {
             Scanner sc = new Scanner(System.in);
-            String risp;
+            String sign;
 
             if (player.countCards() < 2)
                 player.addCard(Deck.pop());
@@ -39,8 +39,8 @@ public class Game {
                 if (player.cardValue() != 21) {
                     try {
                         System.out.print(Design.YELLOW + "\n Hit (+) or Stand (-)? " + Design.RESET);
-                        risp = sc.next();
-                        if (risp.equals("+"))
+                        sign = sc.next();
+                        if (sign.equals("+"))
                             player.addCard(Deck.pop());
                         else
                             isTurnPlayer = false;
@@ -49,8 +49,7 @@ public class Game {
                             isTurnPlayer = false;
                             active = false;
                         }
-                    }
-                    catch (InputMismatchException ignored) {
+                    } catch (InputMismatchException ignored) {
                     }
 
                     if (player.cardValue() > MAX_CARDS_VALUE) {
@@ -66,9 +65,7 @@ public class Game {
     public void turnDealer() {
         if (dealer.countCards() < 2) {
             dealer.addCard(Deck.pop());
-        }
-
-        else {
+        } else {
 
             if (dealer.cardValue() <= player.cardValue())
                 dealer.addCard(Deck.pop());
@@ -138,7 +135,7 @@ public class Game {
         turnDealer();
         while (active) {
             while (isTurnPlayer) {
-                //System.out.println(player.cards);
+                //System.out.println(Deck.toString());
                 turnPlayer();
                 printStatus();
             }

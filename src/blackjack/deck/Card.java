@@ -4,7 +4,7 @@ public class Card implements Comparable{
     private final int value;
     private final int seed;
     public final static String S = "♦♣♥♠";
-    public final static String V = "123456789JQKA";
+    public final static String V = "23456789TJQKA";
 
 
     public Card(int value, int seed) {

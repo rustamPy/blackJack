@@ -67,7 +67,7 @@ public class Player {
                 if (c.isFigure())
                     v += 10;
                 else
-                    v += c.getValue() + 1;
+                    v += c.getValue() + 2;
             } else {
                 if (v + 11 > Game.MAX_CARDS_VALUE)
                     v += 1;
